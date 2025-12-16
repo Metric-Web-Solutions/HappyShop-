@@ -97,7 +97,7 @@ public class CustomerView  {
         Label laQuantity = new Label("Quantity:");
         laQuantity.setStyle(UIStyle.labelStyle);
         tfQuantity = new TextField();
-        tfQuantity.setPromptText("Enter product quantity");
+        tfQuantity.setPromptText("Enter product amount");
         tfQuantity.setStyle(UIStyle.textFiledStyle);
         HBox hbQuantity = new HBox(10, laQuantity, tfQuantity);
 
