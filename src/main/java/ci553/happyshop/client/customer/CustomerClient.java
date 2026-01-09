@@ -33,6 +33,7 @@ public class CustomerClient extends Application {
 
         cusView.cusController = cusController;
         cusController.cusModel = cusModel;
+        cusController.cusView = cusView;
         cusModel.cusView = cusView;
         cusModel.databaseRW = databaseRW;
         cusView.start(window);

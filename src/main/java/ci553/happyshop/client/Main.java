@@ -71,6 +71,7 @@ public class Main extends Application {
         cusView.cusController = cusController;
         cusController.cusModel = cusModel;
         cusModel.cusView = cusView;
+        cusController.cusView = cusView;
         cusModel.databaseRW = databaseRW;
         cusView.start(new Stage());
 

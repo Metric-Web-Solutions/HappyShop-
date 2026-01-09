@@ -63,9 +63,9 @@ public class CustomerModel {
         updateView();
     }
 
-    void addToTrolley(){
+    void addToTrolley(int quantity){
         if(theProduct!= null){
-            makeOrganisedTrolley();
+            makeOrganisedTrolley(quantity);
             displayTaTrolley = ProductListFormatter.buildString(trolley); //build a String for trolley so that we can show it
         }
         else{
@@ -89,8 +89,8 @@ public class CustomerModel {
         updateView();
     }
 
-    void makeOrganisedTrolley() {
-        int searchQuantity = Integer.parseInt(cusView.tfQuantity.getText());
+    void makeOrganisedTrolley(int quantity) {
+        int searchQuantity = quantity;
         for(Product p: trolley) {
             if(p.getProductId().equals(theProduct.getProductId())) {
                 p.setOrderedQuantity(searchQuantity);
@@ -98,6 +98,7 @@ public class CustomerModel {
             }
         }
         Product pNew = new Product(theProduct.getProductId(), theProduct.getProductDescription(), theProduct.getProductImageName(), theProduct.getUnitPrice(), theProduct.getStockQuantity());
+        pNew.setOrderedQuantity(quantity);
         trolley.add(pNew);
         Collections.sort(trolley);
     }

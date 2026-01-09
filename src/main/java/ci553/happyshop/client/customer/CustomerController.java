@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 public class CustomerController {
     public CustomerModel cusModel;
+    public CustomerView cusView;
 
     public void doAction(String action) throws SQLException, IOException {
         switch (action) {
@@ -15,7 +16,8 @@ public class CustomerController {
                 cusModel.search();
                 break;
             case "Add":
-                cusModel.addToTrolley();
+                int quantity = Integer.parseInt(cusView.tfQuantity.getText());
+                cusModel.addToTrolley(quantity);
                 break;
             case "Cancel":
                 cusModel.cancel();
