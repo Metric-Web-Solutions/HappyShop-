@@ -101,14 +101,19 @@ public class CustomerView  {
         tfQuantity.setStyle(UIStyle.textFiledStyle);
         HBox hbQuantity = new HBox(10, laQuantity, tfQuantity);
 
-        Label laPlaceHolder = new Label(  " ".repeat(15)); //create left-side spacing so that this HBox aligns with others in the layout.
         Button btnSearch = new Button("Search");
         btnSearch.setStyle(UIStyle.buttonStyle);
         btnSearch.setOnAction(this::buttonClicked);
-        Button btnAddToTrolley = new Button("Add to Trolley");
+
+        Button btnAddToTrolley = new Button("Add");
         btnAddToTrolley.setStyle(UIStyle.buttonStyle);
         btnAddToTrolley.setOnAction(this::buttonClicked);
-        HBox hbBtns = new HBox(10, laPlaceHolder,btnSearch, btnAddToTrolley);
+
+        Button btnDelete = new Button("Delete");
+        btnDelete.setStyle(UIStyle.buttonStyle);
+        btnDelete.setOnAction(this::buttonClicked);
+        HBox hbSearchBtn = new HBox(10, btnSearch);
+        HBox hbAddDeleteBtns = new HBox(10, btnAddToTrolley, btnDelete);
 
         ivProduct = new ImageView("imageHolder.jpg");
         ivProduct.setFitHeight(60);
@@ -123,7 +128,7 @@ public class CustomerView  {
         HBox hbSearchResult = new HBox(5, ivProduct, lbProductInfo);
         hbSearchResult.setAlignment(Pos.CENTER_LEFT);
 
-        VBox vbSearchPage = new VBox(15, laPageTitle, hbId, hbName, hbBtns, hbSearchResult);
+        VBox vbSearchPage = new VBox(15, laPageTitle, hbId, hbName, hbQuantity, hbSearchBtn, hbAddDeleteBtns, hbSearchResult);
         vbSearchPage.setPrefWidth(COLUMN_WIDTH);
         vbSearchPage.setAlignment(Pos.TOP_CENTER);
         vbSearchPage.setStyle("-fx-padding: 15px;");

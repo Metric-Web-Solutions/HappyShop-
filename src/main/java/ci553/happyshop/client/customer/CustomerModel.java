@@ -76,10 +76,24 @@ public class CustomerModel {
         updateView();
     }
 
-    void makeOrganisedTrolley() {
+    void deleteFromTrolley() {
         for(Product p: trolley) {
             if(p.getProductId().equals(theProduct.getProductId())) {
-                p.setOrderedQuantity(p.getOrderedQuantity() + theProduct.getOrderedQuantity());
+                trolley.remove(p);
+                return;
+            }
+        };
+
+        displayTaTrolley = ProductListFormatter.buildString(trolley);
+        displayTaReceipt="";
+        updateView();
+    }
+
+    void makeOrganisedTrolley() {
+        int searchQuantity = Integer.parseInt(cusView.tfQuantity.getText());
+        for(Product p: trolley) {
+            if(p.getProductId().equals(theProduct.getProductId())) {
+                p.setOrderedQuantity(searchQuantity);
                 return;
             }
         }
