@@ -36,15 +36,17 @@ public class Order {
     private String orderedDateTime="";
     private String progressingDateTime="";
     private String collectedDateTime="";
+    private boolean isPaid;
     private ArrayList<Product> productList = new ArrayList<>(); //Trolley
 
     // Constructor used by OrderHub to create a new order for a customer.
     // Initializes the order with an ID, state, order date/time, and a list of ordered products.
-    public Order(int orderId,OrderState state, String orderedDateTime,ArrayList<Product> productList) {
+    public Order(int orderId,OrderState state, String orderedDateTime,ArrayList<Product> productList,boolean isPaid) {
         this.orderId = orderId;
         this.state = state;
         this.orderedDateTime =orderedDateTime;
         this.productList = new ArrayList<>(productList);
+        this.isPaid = isPaid;
     }
 
     //a set of getter methods
@@ -54,8 +56,12 @@ public class Order {
     public ArrayList<Product> getProductList() {
         return productList;
     }
+    public boolean getPaid() {
+        return isPaid;
+    }
 
     public void setState(OrderState state) { this.state = state; }
+    public void setPaid(boolean isPaid) { this.isPaid = isPaid; }
 
     /**
      * order details written to file, used by OrderHub
@@ -63,20 +69,20 @@ public class Order {
      *  -Product details included in the order
      */
     public String orderDetails() {
-        return String.format("Order ID: %s \n" +
-                        "State: %s \n" +
-                        "OrderedDateTime: %s \n" +
-                        "ProgressingDateTime: %s \n" +
-                        "CollectedDateTime: %s\n" +
-                        "Items:\n%s",
+        return String.format(
+                "Order ID: %s%n" +
+                "State: %s%n" +
+                "OrderedDateTime: %s%n" +
+                "ProgressingDateTime: %s%n" +
+                "CollectedDateTime: %s%n" +
+                "Items:%n%s" +
+                "Paid: %s%n",
                 orderId,
                 state,
                 orderedDateTime,
                 progressingDateTime,
                 collectedDateTime,
-                ProductListFormatter.buildString(productList)
-                );
+                ProductListFormatter.buildString(productList),
+                isPaid);
     }
 }
-
-

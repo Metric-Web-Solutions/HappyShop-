@@ -78,7 +78,7 @@ public class OrderHub  {
         int orderId = OrderCounter.generateOrderId(); //get unique orderId
         String orderedDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         //make an Order Object: id, Ordered_state, orderedDateTime, and productsList(trolley)
-        Order theOrder = new Order(orderId,OrderState.Ordered,orderedDateTime,trolley);
+        Order theOrder = new Order(orderId,OrderState.Ordered,orderedDateTime,trolley, true);
 
         //write order details to file for the orderId in orderedPath (ie. orders/ordered)
         String orderDetail = theOrder.orderDetails();

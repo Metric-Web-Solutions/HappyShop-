@@ -36,10 +36,14 @@ public class CustomerView  {
     private HBox hbRoot; // Top-level layout manager
     private VBox vbTrolleyPage;  //vbTrolleyPage and vbReceiptPage will swap with each other when need
     private VBox vbReceiptPage;
+    private VBox vbPaymentPage;
 
     TextField tfId; //for user input on the search page. Made accessible so it can be accessed or modified by CustomerModel
     TextField tfName; //for user input on the search page. Made accessible so it can be accessed by CustomerModel
     TextField tfQuantity; //for user input on the search page. Made accessible so it can be accessed by CustomerModel
+    TextField tfCardName; // in payment page
+    TextField tfCardNumber; // in payment page
+    TextField tfSecurityCode; // in payment page
 
     //four controllers needs updating when program going on
     private ImageView ivProduct; //image area in searchPage
@@ -55,6 +59,7 @@ public class CustomerView  {
         VBox vbSearchPage = createSearchPage();
         vbTrolleyPage = CreateTrolleyPage();
         vbReceiptPage = createReceiptPage();
+        vbPaymentPage = createPaymentPage();
 
         // Create a divider line
         Line line = new Line(0, 0, 0, HEIGHT);
@@ -163,6 +168,38 @@ public class CustomerView  {
         return vbTrolleyPage;
     }
 
+    private VBox createPaymentPage() {
+        Label laPageTitle = new Label("Payment");
+        laPageTitle.setStyle(UIStyle.labelTitleStyle);
+
+        // Calculates total trolley price and displays it in a label
+        Label laAmount = new Label("$" + cusController.getTotalPrice());
+        laAmount.setStyle(UIStyle.labelStyle);
+
+        tfCardName = new TextField();
+        tfCardName.setPromptText("Enter name on card");
+        tfCardName.setStyle(UIStyle.textFiledStyle);
+
+        tfCardNumber = new TextField();
+        tfCardNumber.setPromptText("Enter card number");
+        tfCardNumber.setStyle(UIStyle.textFiledStyle);
+
+        tfSecurityCode = new TextField();
+        tfSecurityCode.setPromptText("Enter code");
+        tfSecurityCode.setStyle(UIStyle.textFiledStyle);
+
+        Button btnPay = new Button("Pay");
+        btnPay.setStyle(UIStyle.buttonStyle);
+
+        btnPay.setOnAction(this::buttonClicked);
+
+        vbPaymentPage = new VBox(15, laPageTitle, laAmount, tfCardName, tfCardNumber, tfSecurityCode, btnPay);
+        vbPaymentPage.setPrefWidth(COLUMN_WIDTH);
+        vbPaymentPage.setAlignment(Pos.TOP_CENTER);
+        vbPaymentPage.setStyle(UIStyle.rootStyleYellow);
+        return vbPaymentPage;
+    }
+
     private VBox createReceiptPage() {
         Label laPageTitle = new Label("Receipt");
         laPageTitle.setStyle(UIStyle.labelTitleStyle);
@@ -183,13 +220,15 @@ public class CustomerView  {
         return vbReceiptPage;
     }
 
-
     private void buttonClicked(ActionEvent event) {
         try{
             Button btn = (Button)event.getSource();
             String action = btn.getText();
-            if(action.equals("Add to Trolley")){
+            if(action.equals("Add")){
                 showTrolleyOrReceiptPage(vbTrolleyPage); //ensure trolleyPage shows if the last customer did not close their receiptPage
+            }
+            if (action.equals("Check Out")) {
+                showTrolleyOrReceiptPage(vbPaymentPage);
             }
             if(action.equals("OK & Close")){
                 showTrolleyOrReceiptPage(vbTrolleyPage);
@@ -203,9 +242,7 @@ public class CustomerView  {
         }
     }
 
-
     public void update(String imageName, String searchResult, String trolley, String receipt) {
-
         ivProduct.setImage(new Image(imageName));
         lbProductInfo.setText(searchResult);
         taTrolley.setText(trolley);

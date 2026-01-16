@@ -31,7 +31,7 @@ public class CustomerModel {
 
     // Four UI elements to be passed to CustomerView for display updates.
     private String imageName = "imageHolder.jpg";                // Image to show in product preview (Search Page)
-    private String displayLaSearchResult = "No Product was searched yet"; // Label showing search result message (Search Page)
+    public String displayLaSearchResult = "No Product was searched yet"; // Label showing search result message (Search Page)
     private String displayTaTrolley = "";                                // Text area content showing current trolley items (Trolley Page)
     private String displayTaReceipt = "";                                // Text area content showing receipt after checkout (Receipt Page)
 
@@ -89,6 +89,7 @@ public class CustomerModel {
         updateView();
     }
 
+    //  Sets quantity for newly added items, creates new product only for the trolley to add to the collection and sort
     void makeOrganisedTrolley(int quantity) {
         int searchQuantity = quantity;
         for(Product p: trolley) {
@@ -103,7 +104,17 @@ public class CustomerModel {
         Collections.sort(trolley);
     }
 
-    void checkOut() throws IOException, SQLException {
+    // Gets unit price and ordered quantities of every trolley item and multiplies them together tog et the total price
+    double calculateTotal() {
+        double totalPrice = 0;
+        for(Product p: trolley) {
+            totalPrice = totalPrice + (p.getUnitPrice() * p.getOrderedQuantity());
+        }
+        return totalPrice;
+    }
+
+    Order checkOutOrder() throws IOException, SQLException {
+        Order theOrder = null;
         if(!trolley.isEmpty()){
             // Group the products in the trolley by productId to optimize stock checking
             // Check the database for sufficient stock for all products in the trolley.
@@ -116,16 +127,7 @@ public class CustomerModel {
             if(insufficientProducts.isEmpty()){ // If stock is sufficient for all products
                 //get OrderHub and tell it to make a new Order
                 OrderHub orderHub =OrderHub.getOrderHub();
-                Order theOrder = orderHub.newOrder(trolley);
-                trolley.clear();
-                displayTaTrolley ="";
-                displayTaReceipt = String.format(
-                        "Order_ID: %s\nOrdered_Date_Time: %s\n%s",
-                        theOrder.getOrderId(),
-                        theOrder.getOrderedDateTime(),
-                        ProductListFormatter.buildString(theOrder.getProductList())
-                );
-                System.out.println(displayTaReceipt);
+                theOrder = orderHub.newOrder(trolley);
             }
             else{ // Some products have insufficient stock — build an error message to inform the customer
                 StringBuilder errorMsg = new StringBuilder();
@@ -152,6 +154,24 @@ public class CustomerModel {
             System.out.println("Your trolley is empty");
         }
         updateView();
+        return theOrder;
+    }
+
+    // Creates receipt and displays it
+    void checkOut(Order theOrder) {
+        if (theOrder.getPaid()) {
+            trolley.clear();
+            displayTaTrolley ="";
+            displayTaReceipt = String.format(
+                    "Order_ID: %s\nOrdered_Date_Time: %s\n%s",
+                    theOrder.getOrderId(),
+                    theOrder.getOrderedDateTime(),
+                    ProductListFormatter.buildString(theOrder.getProductList()));
+            System.out.println(displayTaReceipt);
+            updateView();
+        } else {
+            System.out.println("Please provide payment");
+        }
     }
 
     /**
@@ -197,6 +217,7 @@ public class CustomerModel {
         }
         cusView.update(imageName, displayLaSearchResult, displayTaTrolley,displayTaReceipt);
     }
+
      // extra notes:
      //Path.toUri(): Converts a Path object (a file or a directory path) to a URI object.
      //File.toURI(): Converts a File object (a file on the filesystem) to a URI object
